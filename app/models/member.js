@@ -25,24 +25,3 @@ module.exports = (sequelize, DataTypes) => {
   return Members;
 };
 
-// 생성자
-const Members = function(member){
-  this.name = member.name;
-  this.email = member.email;
-  this.phone_number = member.phone_number;
-};
-
-
-// member 전체 조회
-Members.getAll = result =>{
-  sql.query('SELECT * FROM Members', (err, res)=>{
-    if(err){
-      console.log("error: ", err);
-      result(err, null);
-      return;
-    }
-    
-    console.log("customer: ", res);
-    result(null, res);
-  });
-};
