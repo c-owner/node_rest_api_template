@@ -10,8 +10,16 @@ dotenv.config({ path: 'src/config/config.env' });
 
 const app = express();
 
-const db = require('../models');
+const database = require('../config/database');
+database.connect(err => {
+   if (err) {
+       console.log("DB CONNECT FAIL : ", err)
+   } else {
+        console.log("success connect")
+    }
+});
 
+const db = require('../models');
 db.sequelize.sync();
 
 // Development Setup
