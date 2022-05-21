@@ -535,3 +535,51 @@ npx sequelize model:generate --name Member --attributes name:string,team:string,
 
 `npx sequelize-cli db:migrate `
 
+`npx sequelize seed:generate --name initialMembers`
+
+
+
+`initalMembers.js`
+
+```js
+'use strict';
+
+module.exports = {
+  async up(queryInterface, Sequelize) {
+    await queryInterface.bulkInsert('Members', [
+          {
+            id: 1,
+            name: 'Alex',
+            team: 'engineering',
+            position: 'Server Developer',
+            emailAddress: 'alex@google.com',
+            phoneNumber: '010-xxxx-xxxx',
+            admissionDate: '2018/12/10',
+            birthday: '1994/11/08',
+            profileImage: 'profile1.png',
+          },
+        ]
+    )
+    /**
+     * Add seed commands here.
+     *
+     * Example:
+     * await queryInterface.bulkInsert('People', [{
+     *   name: 'John Doe',
+     *   isBetaMember: false
+     * }], {});
+     */
+  },
+  
+  async down(queryInterface, Sequelize) {
+    /**
+     * Add commands to revert seed here.
+     *
+     * Example:
+     * await queryInterface.bulkDelete('People', null, {});
+     */
+  }
+};
+```
+
+` npx sequelize db:seed:all   `

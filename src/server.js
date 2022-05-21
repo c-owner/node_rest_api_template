@@ -10,7 +10,7 @@ dotenv.config({ path: 'src/config/config.env' });
 
 const app = express();
 
-const db = require('./models');
+const db = require('../models');
 
 db.sequelize.sync();
 
