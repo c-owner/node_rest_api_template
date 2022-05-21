@@ -6,7 +6,7 @@ exports.create = (req,res)=>{
         res.status(400).send({
             message: "Content can not be empty!"
         });
-    };
+    }
     
     const customer = new Customer({
         email: req.body.email,
@@ -21,7 +21,7 @@ exports.create = (req,res)=>{
                 message:
                     err.message || "Some error occured while creating th Customer."
             });
-        };
+        }
     })
 };
 

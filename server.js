@@ -9,6 +9,15 @@ const cors = require('cors');
 const notFound = require('./app/middleware/notFound');
 const errorHandler = require('./app/middleware/errorHandler');
 
+
+// database
+const models = require("./app/models/index.js");
+models.sequelize.sync().then(() => {
+   console.log("DB Connect Success");
+}).catch((err) => {
+   console.log("DB Connect Error", err);
+});
+
 app.use(express.json());
 app.use(express.urlencoded({extended: true}));
 // cors
@@ -20,6 +29,7 @@ dotenv.config({ path: 'src/config/config.env' });
 
 // routes
 require("./app/routes/customer.route.js")(app);
+require("./app/routes/test.route.js")(app);
 
 
 // Custom middleware here
