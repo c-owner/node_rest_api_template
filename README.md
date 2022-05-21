@@ -113,8 +113,6 @@ CORS_ORIGIN=http://localhost:8000
 
 
 
-
-
 프로젝트의 깔끔함과 유지보수성을 유지하기 위해서 폴더, 파일 추가
 
 ```bash
@@ -167,3 +165,98 @@ module.exports = router;
 app.use('/api/posts', require('./routes/post'));
 ```
 
+----
+
+
+
+
+
+## 모델 - 경로 - 컨트롤러 - 서비스 디렉토리 구조
+
+```
+├───models
+│   ├───user.model.js
+├───routes
+│   ├───user.route.js
+├───services
+│   ├───user.service.js
+├───controllers
+│   ├───user.controller.js
+```
+
+모듈 식 코드 구조의 경우 논리는 이러한 디렉터리와 파일로 나누어 져야합니다.
+
+> **모델** - **모델** 의 스키마 정의
+
+> **경로** - API 경로가 컨트롤러에 매핑됩니다.
+
+> **컨트롤러** - 컨트롤러는 요청 매개 변수 확인, 쿼리, 올바른 코드로 응답 보내기의 모든 로직을 처리합니다.
+
+> **서비스** - 서비스에는 데이터베이스 쿼리와 반환 객체 또는 오류 발생이 포함됩니다.
+
+이 코더는 더 많은 코드를 작성하게됩니다. 그러나 결국 코드는 훨씬 더 정비 가능하고 분리 될 것입니다.
+
+## 모델 - 경로 - 컨트롤러 - 서비스 코드 구조
+
+## userModel.js
+
+```js
+var mongoose = require('mongoose')
+
+const UserSchema  = new mongoose.Schema({
+    name: String
+})
+
+const User = mongoose.model('User', UserSchema)
+
+module.exports = User;
+```
+
+## userRoutes.js
+
+```js
+var express = require('express');
+var router = express.Router();
+
+var UserController = require('../controllers/user.controller')
+
+router.get('/', UserController.getUsers)
+
+module.exports = router;
+```
+
+## userControllers.js
+
+```js
+var UserService = require('../services/user.service')    
+
+exports.getUsers = async function (req, res, next) {
+    // Validate request parameters, queries using express-validator
+    
+    var page = req.params.page ? req.params.page : 1;
+    var limit = req.params.limit ? req.params.limit : 10;
+    try {
+        var users = await UserService.getUsers({}, page, limit)
+        return res.status(200).json({ status: 200, data: users, message: "Succesfully Users Retrieved" });
+    } catch (e) {
+        return res.status(400).json({ status: 400, message: e.message });
+    }
+}
+```
+
+## userServices.js
+
+```js
+var User = require('../models/user.model')
+
+exports.getUsers = async function (query, page, limit) {
+
+    try {
+        var users = await User.find(query)
+        return users;
+    } catch (e) {
+        // Log Errors
+        throw Error('Error while Paginating Users')
+    }
+}
+```
