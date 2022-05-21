@@ -3,9 +3,9 @@
 
 
 ```bash
-mkdir src
-mkdir src/config
-touch src/server.js src/config/config.env
+mkdir app
+mkdir app/config
+touch app/server.js app/config/config.env
 npm install colors dotenv
 npm install nodemon --save-dev
 ```
@@ -25,10 +25,10 @@ npm install nodemon --save-dev
   "name": "api_campfire_web",
   "version": "1.0.0",
   "description": "campfire_api",
-  "main": "src/server.js",
+  "main": "app/server.js",
   "scripts": {
-    "start": "NODE_ENV=production node src/server.js",
-    "dev": "NODE_ENV=development nodemon src/server.js",
+    "start": "NODE_ENV=production node app/server.js",
+    "dev": "NODE_ENV=development nodemon app/server.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "corner",

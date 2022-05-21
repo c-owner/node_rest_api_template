@@ -27,6 +27,7 @@ exports.create = (req,res)=>{
 
 // 전체 조회
 exports.findAll = (req,res)=>{
+    console.log("-----")
     Customer.getAll((err, data) => {
         if (err)
             res.status(500).send({

@@ -4,14 +4,13 @@ const dotenv = require('dotenv');
 const colors = require('colors');
 
 const cors = require('cors');
+
+// middleware
 const notFound = require('./app/middleware/notFound');
 const errorHandler = require('./app/middleware/errorHandler');
 
 app.use(express.json());
 app.use(express.urlencoded({extended: true}));
-// Custom middleware here
-app.use(notFound);
-app.use(errorHandler);
 // cors
 app.use(cors({
     origin: process.env.CORS_ORIGIN,
@@ -19,8 +18,13 @@ app.use(cors({
 // dotenv, colors
 dotenv.config({ path: 'src/config/config.env' });
 
-
+// routes
 require("./app/routes/customer.route.js")(app);
+
+
+// Custom middleware here
+app.use(notFound);
+app.use(errorHandler);
 
 const PORT = process.env.PORT || 8080;
 
