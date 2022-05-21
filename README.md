@@ -167,7 +167,17 @@ app.use('/api/posts', require('./routes/post'));
 
 ----
 
+## API Test
 
+`http://localhost:3000/api/posts/post` 
+
+
+
+
+
+
+
+---
 
 
 

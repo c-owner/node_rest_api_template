@@ -55,3 +55,4 @@ exports.getPostById = (req, res) => {
         error: 'No post found',
     })
 };
+

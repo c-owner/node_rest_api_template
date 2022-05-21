@@ -26,6 +26,7 @@ app.use(express.json());
 
 // All routes here
 app.use('/api/posts', require('./routes/post'));
+app.use('/api/user', require('./routes/userRoute'));
 
 // Custom middleware here
 app.use(notFound);

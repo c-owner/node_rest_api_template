@@ -3,12 +3,15 @@ const express = require('express');
 const router = express.Router();
 
 // Controller Methods
-const { getPosts, getPostById } = require('../controllers/postsController');
+const postController = require('../controllers/postsController');
 
-router.route('/')
-    .get(getPosts);
+router.route('/post')
+    .get(postController.getPosts);
 
-router.route('/:id')
-    .get(getPostById);
+router.route('/post/:id')
+    .get(postController.getPostById);
+
+
+ 
 
 module.exports = router;
