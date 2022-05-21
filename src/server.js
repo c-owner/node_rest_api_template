@@ -10,6 +10,10 @@ dotenv.config({ path: 'src/config/config.env' });
 
 const app = express();
 
+const db = require('./models');
+
+db.sequelize.sync();
+
 // Development Setup
 if (process.env.NODE_ENV === 'development') {
     // require morgan if in development mode

@@ -519,11 +519,15 @@ DB 정리
 
 `npx sequelize init      `
 
-` npx sequelize db:create --env mysql    `
+` npx sequelize db:create --env development    `
 
 
 
-`npx sequelize model:generate --name Member --attributes name:string,team:string,position:string,emailAddress:string,phoneNumber:string,admissionDate:date,birthday:date,profileImage:string` 
+```bash
+npx sequelize model:generate --name Member --attributes name:string,team:string,position:string,emailAddress:string,phoneNumber:string,admissionDate:date,birthday:date,profileImage:string
+```
+
+
 
 필요한 컬럼:타입 정의
 
