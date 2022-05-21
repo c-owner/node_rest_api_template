@@ -14,7 +14,6 @@ const app = express();
 if (process.env.NODE_ENV === 'development') {
     // require morgan if in development mode
     // setting morgan to dev: https://www.npmjs.com/package/morgan#dev
-    app.use(require('morgan')('dev'));
 }
 
 // Put all the server-wide middleware here
@@ -31,6 +30,8 @@ app.use('/api/user', require('./routes/userRoute'));
 // Custom middleware here
 app.use(notFound);
 app.use(errorHandler);
+
+//db
 
 const PORT = process.env.PORT || 3000;
 

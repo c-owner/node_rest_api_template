@@ -270,3 +270,264 @@ exports.getUsers = async function (query, page, limit) {
     }
 }
 ```
+
+
+
+----
+
+
+
+## DATABASE
+
+최근까지는 직접 SQL문을 작성하여 쿼리를 날리는 식으로 코드를 짰지만, 최근 많은 논쟁도 있긴 하지만 점유율이 상당하고 대기업에서도 많이 쓰고 있는 ORM을 적용해보고자 한다.
+
+## 01. ORM이란?
+
+> **ORM(Object Relational Mapping) - 객체-관계 매핑의 줄임말**
+> 데이터베이스에 있는 데이터를 코드 상의 객체에 대응시켜서, 객체를 다루는 코드를 통해 데이터베이스 작업을 수행할 수 있도록 해주는 기술을 총칭하는 말
+
+## 02. Node에서의 ORM
+
+node.js에서는 **Sequelize** 패키지를 이용해 ORM을 이용하게 된다.
+
+### 1) 설치
+
+```bash
+npm install mysql2 sequelize sequelize-cli
+```
+
+- mysql2 : node에서 mysql DBMS에 접근하기 위해 필요한 패키지(promise를 사용하기 위해 mysql2사용)-JS와 mysql DBMS 사이에서 SQL문들을 전달하고 결과를 받는 클라이언트 객체의 역할을 해줌
+- sequelize : ORM을 이용해 데이터베이스를 다룰 수 있는 패키지
+- sequelize-cli : 데이터베이스 관련 작업을 sequelize와 연동해서 터미널에서 직접 수행할 수 있게 해주는 패키지
+
+### 2) 초기화
+
+```bash
+npx sequelize init
+```
+
+- 해당 작업을 해주면 총 4개의 디렉토리와 파일들이 생성됨
+  - config/config.json
+  - models/
+  - migrations/
+  - seeders/
+
+#### config/config.json
+
+해당 파일을 살펴보면 총 3개의 객체로 구성된다.
+보통 개인용 프로젝트에서는 데이터베이스를 하나만 사용하지만, 실제로 실무용 프로젝트에서는 개발용, 테스트용, 배포용 데이터베이스를 용도별로 별도로 구분하여 사용하는 경우가 많기 때문에 3가지 설정 정보가 존재한다.
+
+이번엔 `development`만 사용할 것이기 때문에, `development`부분의 `password`를 mysql root계정의 비밀번호로 변경하고, database의 이름은 알맞게 바꿔주면 된다.
+
+```js
+{
+  "development": {
+    "username": "root",
+    "password": "내가 지정한 비밀번호",
+    "database": "내가 생성할(혹은 존재하는) 데이터베이스 이름",
+    "host": "127.0.0.1",
+    "dialect": "mysql"
+  },
+  "test": {
+    "username": "root",
+    "password": null,
+    "database": "database_test",
+    "host": "127.0.0.1",
+    "dialect": "mysql"
+  },
+  "production": {
+    "username": "root",
+    "password": null,
+    "database": "database_production",
+    "host": "127.0.0.1",
+    "dialect": "mysql"
+  }
+}
+```
+
+### 3) 데이터베이스 생성
+
+해당 명령어를 사용하면 DB를 생성할 수 있다.
+
+```bash
+npx sequelize db:create --env development
+```
+
+조금 더 자세히 설명하자면,
+
+- `db:create` - 데이터베이스를 생성하는 명령어
+
+- ```
+  --env 사용할 객체
+  ```
+
+   
+
+  \- config.json 파일에 있던 3가지 객체 중 어떤 객체를 사용할 지 결정하는 것
+
+  - 예) `db:create --env name` : config.json의 development 객체의 설정대로 디비를 생성하게 된다(json파일의 development객체의 "database"에 적은 이름과 같은 데이터베이스가 생성된다)
+
+### 4) 모델과 테이블 생성
+
+> **기억할 점**
+> 데이터베이스의 테이블이 sequelize를 통해 Javascript의 하나의 클래스에 매핑되게 된다. 그리고 테이블의 하나의 row(튜플 혹은 레코드)는 class의 하나의 객체에 매핑되게 된다.
+
+직원 정보를 저장할 테이블(Member)을 만들어보자.
+먼저 명령어부터 살펴보자. 조금 길지만 차근차근 따라가보자.
+
+```bash
+npx sequelize model:generate --name Member --attributes 
+name:string,team:string,position:string,emailAddress:string,
+phoneNumber:string,admissionDate:date,birthday:date,profileImage:string
+```
+
+- ```
+  model:generate
+  ```
+
+   
+
+  \- 모델을 생성한다는 명령어
+
+  - 모델 : 하나의 테이블에 대응되는 하나의 클래스를 의미한다
+
+- `--name 모델 이름`
+
+- ```
+  --attributes 속성 나열
+  ```
+
+  - `속성이름:데이터타입` 형태
+  - `id`는 Sequelize에서 기본으로 생성해준다
+
+위 코드를 실행하고 나면 models디렉토리와 migrations 디렉토리에 변화가 생긴다
+
+- models
+
+  - `members.js` 파일이 생성된다
+
+- migrations
+
+  - `생성날짜-작업.js` 파일이 생성된다
+
+  - 위 예시에서는
+
+     
+
+    ```
+    20220118010753-create-member.js
+    ```
+
+    와 같은 파일이 생성되게 된다.
+
+    - 해당 파일을 통해 테이블을 생성하거나 삭제할 수 있다.
+
+> #### migration란 무엇일까?
+>
+> 데이터베이스에서 일어나는 모든 변경사항을 의미한다. 예를 들어 테이블 생성, 테이블 컬럼 변경 등이 있다.
+
+- migrations 폴더 내의 각 파일을 살펴보면,
+
+   
+
+  2가지 메소드
+
+  가 공개되어 있다.
+
+  - `up` : migration을 적용할 때 실행
+  - `down` : migration을 적용해제할 때 실행
+    위 예시에서의 파일을 살펴보자
+
+> **유의**
+> 아래 파일의 `createTable()`메소드의 테이블 이름을 보면 `Members`라고 복수로 되어 있다. `Sequelize`에서는 기본적으로 모델을 만들 때 단수로 정했더라도 자동적으로 테이블 이름은 복수로 하게 된다.
+
+```javascript
+// 20220118010753-create-member.js
+'use strict';
+module.exports = {
+  async up(queryInterface, Sequelize) {
+    await queryInterface.createTable('Members', {
+      id: {
+        allowNull: false,
+        autoIncrement: true,
+        primaryKey: true,
+        type: Sequelize.INTEGER
+      },
+      name: {
+        type: Sequelize.STRING
+      },
+      team: {
+        type: Sequelize.STRING
+      },
+      position: {
+        type: Sequelize.STRING
+      },
+      emailAddress: {
+        type: Sequelize.STRING
+      },
+      phoneNumber: {
+        type: Sequelize.STRING
+      },
+      admissionDate: {
+        type: Sequelize.DATE
+      },
+      birthday: {
+        type: Sequelize.DATE
+      },
+      profileImage: {
+        type: Sequelize.STRING
+      },
+      createdAt: {
+        allowNull: false,
+        type: Sequelize.DATE,
+        defaultValue: Sequelize.fn('now')
+      },
+      updatedAt: {
+        allowNull: false,
+        type: Sequelize.DATE,
+        defaultValue: Sequelize.fn('now')
+      }
+    });
+  },
+  async down(queryInterface, Sequelize) {
+    await queryInterface.dropTable('Members');
+  }
+};
+```
+
+- 이후 해당 명령어를 실행하면 테이블 생성이 완료된다.
+  - `npx sequelize-cli db:migrate`
+  - 또는 ./models/ 디렉토리 내부의 각 모델 파일들을 완성시킨 후 메인 파일에서 해당 sequelize를 `sync()`시키면 테이블이 없으면 생성하고 있다면 생성하지 않는다.
+
+모델과 테이블 연동, 정보 조회 등에 관련해서는 다음 글에서 다뤄보겠다.
+
+> 참고
+>
+> - [코드잇](http://codeit.kr/)
+> - Sequelize 기본 문서
+> - Sequelize-cli 기본 문서
+
+
+
+
+
+
+
+DB 정리
+
+`npm install mysql2 sequelize sequelize-cli  `
+
+`npx sequelize init      `
+
+` npx sequelize db:create --env mysql    `
+
+
+
+`npx sequelize model:generate --name Member --attributes name:string,team:string,position:string,emailAddress:string,phoneNumber:string,admissionDate:date,birthday:date,profileImage:string` 
+
+필요한 컬럼:타입 정의
+
+
+
+`npx sequelize-cli db:migrate `
+
