@@ -5,6 +5,8 @@ module.exports = app => {
     // 전체 조회
     app.get("/test", test_member.findAll);
     
+    // 계정 생성
+    app.post("/test", test_member.create);
  
     
 }
