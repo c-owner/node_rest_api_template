@@ -1,41 +1,50 @@
 'use strict';
-const {
-    Model
-} = require('sequelize');
-module.exports = (sequelize, DataTypes) => {
-    class Member extends Model {
-        /**
-         * Helper method for defining associations.
-         * This method is not a part of Sequelize lifecycle.
-         * The `models/index` file will call this method automatically.
-         */
-        static associate(models) {
-            // define association here
-        }
+module.exports = {
+    async up(queryInterface, Sequelize) {
+        await queryInterface.createTable('Members', {
+            id: {
+                allowNull: false,
+                autoIncrement: true,
+                primaryKey: true,
+                type: Sequelize.INTEGER
+            },
+            name: {
+                type: Sequelize.STRING
+            },
+            team: {
+                type: Sequelize.STRING
+            },
+            position: {
+                type: Sequelize.STRING
+            },
+            emailAddress: {
+                type: Sequelize.STRING
+            },
+            phoneNumber: {
+                type: Sequelize.STRING
+            },
+            admissionDate: {
+                type: Sequelize.DATE
+            },
+            birthday: {
+                type: Sequelize.DATE
+            },
+            profileImage: {
+                type: Sequelize.STRING
+            },
+            createdAt: {
+                allowNull: false,
+                type: Sequelize.DATE,
+                defaultValue: Sequelize.fn('now')
+            },
+            updatedAt: {
+                allowNull: false,
+                type: Sequelize.DATE,
+                defaultValue: Sequelize.fn('now')
+            }
+        });
+    },
+    async down(queryInterface, Sequelize) {
+        await queryInterface.dropTable('Members');
     }
-    
-    Member.init({
-        name: DataTypes.STRING,
-        team: DataTypes.STRING,
-        position: DataTypes.STRING,
-        emailAddress: DataTypes.STRING,
-        phoneNumber: DataTypes.STRING,
-        admissionDate: DataTypes.DATE,
-        birthday: DataTypes.DATE,
-        profileImage: DataTypes.STRING
-    }, {
-        sequelize,
-        modelName: 'Member',
-    });
-    return Member;
 };
-
-// const mongoose = require('mongoose')
-//
-// const UserSchema  = new mongoose.Schema({
-//     name: String
-// })
-//
-// const User = mongoose.model('User', UserSchema)
-//
-// module.exports = User;
