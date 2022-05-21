@@ -18,6 +18,8 @@ exports.getUsers = async function (req, res, next) {
 }
 
 exports.getMyUser = async function (req, res, next) {
-    let users = await UserService.getMyUser({});
+    console.log("getMyUser()::::::::::::::", UserService.getMyUser())
+    console.log("getUsers()::::::::::::::", UserService.getUsers())
+    let users = await UserService.getMyUser;
     return res.status(200).json({ status: 200, data: users, message: "success"});
 }

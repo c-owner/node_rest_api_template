@@ -30,9 +30,6 @@ module.exports = (sequelize, DataTypes) => {
     return Member;
 };
 
-const userDB = Model.findAll();
-module.exports = userDB;
-
 // const mongoose = require('mongoose')
 //
 // const UserSchema  = new mongoose.Schema({
