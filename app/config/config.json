@@ -1,15 +1,16 @@
+// TODO :: 수정필요
 {
   "development": {
     "username": "root",
     "password": "thiskim12!@",
-    "database": "test_dev",
+    "database": "diary",
     "host": "127.0.0.1",
     "dialect": "mysql"
   },
   "test": {
     "username": "root",
-    "password": null,
-    "database": "database_test",
+    "password": "thiskim12!@",
+    "database": "diary_dev",
     "host": "127.0.0.1",
     "dialect": "mysql"
   },

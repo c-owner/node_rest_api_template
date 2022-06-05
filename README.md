@@ -30,6 +30,13 @@ version : 1.0.0
 
 
 
+```bash
+cd app
+sequelize db:create --env development
+```
+
+
+
 ## Usage Package
 
 ```bash
