@@ -3,14 +3,14 @@
   "development": {
     "username": "root",
     "password": "thiskim12!@",
-    "database": "diary",
+    "database": "project",
     "host": "127.0.0.1",
     "dialect": "mysql"
   },
   "test": {
     "username": "root",
     "password": "thiskim12!@",
-    "database": "diary_dev",
+    "database": "project_dev",
     "host": "127.0.0.1",
     "dialect": "mysql"
   },

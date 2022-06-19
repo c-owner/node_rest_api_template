@@ -4,7 +4,7 @@ module.exports = {
     PORT: "3306",
     USER: "root",
     PASSWORD: "thiskim12!@",
-    DB: "diary",
+    DB: "project",
     dialect: "mysql",
     dialectOptions: {
         charset: "utf8mb4",
